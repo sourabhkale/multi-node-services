@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d lib"
   },
   "keywords": [],
   "author": "",
@@ -11,5 +12,10 @@
   "description": "",
   "dependencies": {
     "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.20.0",
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.21.0"
   }
 }
