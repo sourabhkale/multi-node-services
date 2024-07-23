@@ -13,28 +13,28 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
 jobs:
-- job: LogChangedFiles
-  displayName: 'Log Changed Files and Build Reason'
+- job: GetChangedFiles
+  displayName: 'Get Changed Files'
   steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '10.x'
-    displayName: 'Install Node.js'
   - script: |
-      echo "Changed files: $(Build.ChangedFiles)"
-      echo "Build Reason: $(Build.Reason)"
-    displayName: 'Log Changed Files and Build Reason'
+      echo ##vso[task.setvariable variable=changedFiles]$(git diff --name-only $(Build.SourceVersion^) $(Build.SourceVersion))
+    displayName: 'Fetch Changed Files'
+    env:
+      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
 - job: Build_A
   displayName: Build A
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), or(contains(variables['Build.ChangedFiles'], 'A/service1/'), contains(variables['Build.ChangedFiles'], 'A/service2/'), contains(variables['Build.ChangedFiles'], 'A/service3/')))
+  dependsOn: GetChangedFiles
+  condition: and(succeeded(), or(contains(variables['changedFiles'], 'A/service1/'), contains(variables['changedFiles'], 'A/service2/'), contains(variables['changedFiles'], 'A/service3/')))
   steps:
   - task: NodeTool@0
     inputs:
       versionSpec: '10.x'
     displayName: 'Install Node.js'
-  - script: echo "Building A/service1, A/service2, or A/service3"
   - script: |
       cd A/service1
       npm install
@@ -53,13 +53,13 @@ jobs:
 
 - job: Build_B
   displayName: Build B
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), or(contains(variables['Build.ChangedFiles'], 'B/service1/'), contains(variables['Build.ChangedFiles'], 'B/service2/'), contains(variables['Build.ChangedFiles'], 'B/service3/')))
+  dependsOn: GetChangedFiles
+  condition: and(succeeded(), or(contains(variables['changedFiles'], 'B/service1/'), contains(variables['changedFiles'], 'B/service2/'), contains(variables['changedFiles'], 'B/service3/')))
   steps:
   - task: NodeTool@0
     inputs:
       versionSpec: '10.x'
     displayName: 'Install Node.js'
-  - script: echo "Building B/service1, B/service2, or B/service3"
   - script: |
       cd B/service1
       npm install
@@ -78,13 +78,13 @@ jobs:
 
 - job: Build_C
   displayName: Build C
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), or(contains(variables['Build.ChangedFiles'], 'C/service1/'), contains(variables['Build.ChangedFiles'], 'C/service2/'), contains(variables['Build.ChangedFiles'], 'C/service3/')))
+  dependsOn: GetChangedFiles
+  condition: and(succeeded(), or(contains(variables['changedFiles'], 'C/service1/'), contains(variables['changedFiles'], 'C/service2/'), contains(variables['changedFiles'], 'C/service3/')))
   steps:
   - task: NodeTool@0
     inputs:
       versionSpec: '10.x'
     displayName: 'Install Node.js'
-  - script: echo "Building C/service1, C/service2, or C/service3"
   - script: |
       cd C/service1
       npm install
@@ -103,13 +103,13 @@ jobs:
 
 - job: Build_D
   displayName: Build D
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), or(contains(variables['Build.ChangedFiles'], 'D/service1/'), contains(variables['Build.ChangedFiles'], 'D/service2/'), contains(variables['Build.ChangedFiles'], 'D/service3/')))
+  dependsOn: GetChangedFiles
+  condition: and(succeeded(), or(contains(variables['changedFiles'], 'D/service1/'), contains(variables['changedFiles'], 'D/service2/'), contains(variables['changedFiles'], 'D/service3/')))
   steps:
   - task: NodeTool@0
     inputs:
       versionSpec: '10.x'
     displayName: 'Install Node.js'
-  - script: echo "Building D/service1, D/service2, or D/service3"
   - script: |
       cd D/service1
       npm install
@@ -128,13 +128,13 @@ jobs:
 
 - job: Build_E
   displayName: Build E
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), or(contains(variables['Build.ChangedFiles'], 'E/service1/'), contains(variables['Build.ChangedFiles'], 'E/service2/'), contains(variables['Build.ChangedFiles'], 'E/service3/')))
+  dependsOn: GetChangedFiles
+  condition: and(succeeded(), or(contains(variables['changedFiles'], 'E/service1/'), contains(variables['changedFiles'], 'E/service2/'), contains(variables['changedFiles'], 'E/service3/')))
   steps:
   - task: NodeTool@0
     inputs:
       versionSpec: '10.x'
     displayName: 'Install Node.js'
-  - script: echo "Building E/service1, E/service2, or E/service3"
   - script: |
       cd E/service1
       npm install
