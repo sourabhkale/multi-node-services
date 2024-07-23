@@ -1,21 +1,155 @@
 # Node.js
 # Build a general Node.js project with npm.
 # Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
 
 trigger:
-- master
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - A/**
+      - B/**
+      - C/**
+      - D/**
+      - E/**
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
+jobs:
+- job: Build_A
+  displayName: Build A
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), or(contains(variables['Build.ChangedFiles'], 'A/service1/'), contains(variables['Build.ChangedFiles'], 'A/service2/'), contains(variables['Build.ChangedFiles'], 'A/service3/')))
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js'
+  
+  - script: |
+      cd A/service1
+      npm install
+      npm run build
+    displayName: 'Build A/service1'
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+  - script: |
+      cd A/service2
+      npm install
+      npm run build
+    displayName: 'Build A/service2'
+
+  - script: |
+      cd A/service3
+      npm install
+      npm run build
+    displayName: 'Build A/service3'
+
+- job: Build_B
+  displayName: Build B
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), or(contains(variables['Build.ChangedFiles'], 'B/service1/'), contains(variables['Build.ChangedFiles'], 'B/service2/'), contains(variables['Build.ChangedFiles'], 'B/service3/')))
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js'
+  
+  - script: |
+      cd B/service1
+      npm install
+      npm run build
+    displayName: 'Build B/service1'
+
+  - script: |
+      cd B/service2
+      npm install
+      npm run build
+    displayName: 'Build B/service2'
+
+  - script: |
+      cd B/service3
+      npm install
+      npm run build
+    displayName: 'Build B/service3'
+
+- job: Build_C
+  displayName: Build C
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), or(contains(variables['Build.ChangedFiles'], 'C/service1/'), contains(variables['Build.ChangedFiles'], 'C/service2/'), contains(variables['Build.ChangedFiles'], 'C/service3/')))
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js'
+  
+  - script: |
+      cd C/service1
+      npm install
+      npm run build
+    displayName: 'Build C/service1'
+
+  - script: |
+      cd C/service2
+      npm install
+      npm run build
+    displayName: 'Build C/service2'
+
+  - script: |
+      cd C/service3
+      npm install
+      npm run build
+    displayName: 'Build C/service3'
+
+- job: Build_D
+  displayName: Build D
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), or(contains(variables['Build.ChangedFiles'], 'D/service1/'), contains(variables['Build.ChangedFiles'], 'D/service2/'), contains(variables['Build.ChangedFiles'], 'D/service3/')))
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js'
+  
+  - script: |
+      cd D/service1
+      npm install
+      npm run build
+    displayName: 'Build D/service1'
+
+  - script: |
+      cd D/service2
+      npm install
+      npm run build
+    displayName: 'Build D/service2'
+
+  - script: |
+      cd D/service3
+      npm install
+      npm run build
+    displayName: 'Build D/service3'
+
+- job: Build_E
+  displayName: Build E
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), or(contains(variables['Build.ChangedFiles'], 'E/service1/'), contains(variables['Build.ChangedFiles'], 'E/service2/'), contains(variables['Build.ChangedFiles'], 'E/service3/')))
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js'
+  
+  - script: |
+      cd E/service1
+      npm install
+      npm run build
+    displayName: 'Build E/service1'
+
+  - script: |
+      cd E/service2
+      npm install
+      npm run build
+    displayName: 'Build E/service2'
+
+  - script: |
+      cd E/service3
+      npm install
+      npm run build
+    displayName: 'Build E/service3'
