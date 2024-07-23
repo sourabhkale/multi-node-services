@@ -21,8 +21,14 @@ jobs:
   displayName: 'Get Changed Files'
   steps:
   - script: |
+      echo "Fetching previous commit SHA..."
+      prev_commit=$(git rev-parse HEAD^)
+      echo "Previous commit SHA: $prev_commit"
+      echo "Fetching current commit SHA..."
+      curr_commit=$(git rev-parse HEAD)
+      echo "Current commit SHA: $curr_commit"
       echo "Fetching changed files..."
-      changed_files=$(git diff --name-only $(Build.SourceVersion^) $(Build.SourceVersion))
+      changed_files=$(git diff --name-only $prev_commit $curr_commit)
       echo "Changed files: $changed_files"
       echo "##vso[task.setvariable variable=changedFiles]$changed_files"
     displayName: 'Fetch Changed Files'
